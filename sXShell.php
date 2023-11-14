@@ -302,9 +302,6 @@ echo $guiscript;
 echo $banner;
 echo $guibtn;
 
-if (isset($_GET['gui'])) {
-	echo $guibtn;
-}
 if (isset($_GET['gui']) && isset($_GET['cmd'])) {
 	echo $guicmd;
 }
