@@ -1,5 +1,14 @@
 <?php
 
+$user = "sansxpl";
+$pass = "sxpl69";
+
+if (($_SERVER["PHP_AUTH_USER"] != $user) || (($_SERVER["PHP_AUTH_PW"]) != $pass))
+{
+		header("WWW-Authenticate: Basic realm=\"Login\"");
+		header("HTTP/1.0 401 Unauthorized");
+		exit();
+}
 
 $style = "
 <style>
@@ -290,15 +299,6 @@ echo $guiscript;
 <div class="center font">
 <pre style="font-size:large;">
 <?php
-$user = "sansxpl";
-$pass = "sxpl69";
-
-if (($_SERVER["PHP_AUTH_USER"] != $user) || (($_SERVER["PHP_AUTH_PW"]) != $pass))
-{
-		header("WWW-Authenticate: Basic realm=\"Login\"");
-		header("HTTP/1.0 401 Unauthorized");
-		exit();
-}
 echo $banner;
 
 		if (isset($_GET['gui'])) {
