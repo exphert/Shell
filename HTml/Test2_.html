@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<input type="text" id="myUrl" placeholder="Enter URL link here">
+<br><br>
+<button onclick="playMedia()">Play</button>
+<button onclick="pauseMedia()">Pause</button>
+<br><br>
+File Name: <span id="fileName"></span>
+<br>
+Duration: <span id="duration"></span>
+<br>
+Current Time: <span id="currentTime"></span>
+
+<br><br>
+<div style="width:500px;border:1px solid black">
+  <div id="timeline" style="background-color:green;height:10px;"></div>
+</div>
+
+<br><br>
+<div id="videoContainer" style="display:none">
+  <video id="videoPlayer" controls></video>
+</div>
+
+<script>
+  var media = new Audio();
+  var fileInput = document.getElementById("myUrl");
+  var fileName = document.getElementById("fileName");
+  var duration = document.getElementById("duration");
+  var currentTime = document.getElementById("currentTime");
+  var timeline = document.getElementById("timeline");
+  var videoContainer = document.getElementById("videoContainer");
+  var videoPlayer = document.getElementById("videoPlayer");
+
+  function playMedia() {
+    var url = fileInput.value;
+    var fileType = url.split(".")[url.split(".").length - 1];
+
+    if (fileType === "mp3" || fileType === "ogg") {
+      media.src = url;
+      fileName.innerHTML = url;
+      media.onloadedmetadata = function() {
+        var hours = Math.floor(media.duration / 3600);
+        var minutes = Math.floor((media.duration % 3600) / 60);
+        var seconds = Math.floor(media.duration % 60);
+        if(hours>0){
+            duration.innerHTML = hours + " hours " + minutes + " minutes " + seconds + " seconds";
+        }else if(minutes>0){
+            duration.innerHTML = minutes + " minutes " + seconds + " seconds";
+        }else{
+            duration.innerHTML = seconds + " seconds";
+        }
+      };
+      media.play();
+      videoContainer.style.display = "none";
+    } else if (fileType === "mp4" || fileType === "webm") {
+      videoPlayer.src = url;
+      fileName.innerHTML = url;
+      videoPlayer.onloadedmetadata = function() {
+        var hours = Math.floor(videoPlayer.duration / 3600);
+        var minutes = Math.floor((videoPlayer.duration % 3600) / 60);
+        var seconds = Math.floor(videoPlayer.duration % 60);
+        if(hours>0){
+            duration.innerHTML = hours + " hours " + minutes + " minutes " + seconds + " seconds";
+        }else if(minutes>0){
+            duration.innerHTML = minutes + " minutes " + seconds + " seconds";
+else{
+duration.innerHTML = seconds + " seconds";
+}};
+videoPlayer.play();
+videoContainer.style.display = "block";
+} else {
+alert("Invalid file type. Please enter a valid URL link for an mp3, ogg, mp4, or webm file.");
+}
+setInterval(function() {
+  currentTime.innerHTML = media.currentTime + " seconds";
+  timeline.style.width = (media.currentTime / media.duration) * 100 + "%";
+}, 1000);
+}
+
+function pauseMedia() {
+if(media.src) {
+media.pause();
+} else if(videoPlayer.src) {
+videoPlayer.pause();
+}
+}
+</script>
+
+</body>
+</html>

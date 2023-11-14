@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<input type="file" id="myFile" accept=".mp3,.mp4">
+<br><br>
+<button onclick="playAudio()">Play</button>
+<button onclick="pauseAudio()">Pause</button>
+<br><br>
+File Name: <span id="fileName"></span>
+<br>
+Duration: <span id="duration"></span>
+<br>
+Current Time: <span id="currentTime"></span>
+
+<br><br>
+<div style="width:500px;border:1px solid black">
+  <div id="timeline" style="background-color:green;height:10px;"></div>
+</div>
+
+<br><br>
+<div id="videoContainer" style="display:none">
+  <video id="videoPlayer" controls></video>
+</div>
+
+<script>
+  var audio = new Audio();
+  var fileInput = document.getElementById("myFile");
+  var fileName = document.getElementById("fileName");
+  var duration = document.getElementById("duration");
+  var currentTime = document.getElementById("currentTime");
+  var timeline = document.getElementById("timeline");
+  var videoContainer = document.getElementById("videoContainer");
+  var videoPlayer = document.getElementById("videoPlayer");
+
+  fileInput.onchange = function() {
+    var file = fileInput.files[0];
+    var fileType = file.type.split("/")[0];
+
+    if (fileType === "audio") {
+      audio.src = URL.createObjectURL(file);
+      fileName.innerHTML = file.name;
+      audio.onloadedmetadata = function() {
+        var hours = Math.floor(audio.duration / 3600);
+        var minutes = Math.floor((audio.duration % 3600) / 60);
+        var seconds = Math.floor(audio.duration % 60);
+        if(hours>0){
+            duration.innerHTML = hours + " hours " + minutes + " minutes " + seconds + " seconds";
+        }else if(minutes>0){
+            duration.innerHTML = minutes + " minutes " + seconds + " seconds";
+        }else{
+            duration.innerHTML = seconds + " seconds";
+        }
+      };
+      videoContainer.style.display = "none";
+    } else if (fileType === "video") {
+      videoPlayer.src = URL.createObjectURL(file);
+      fileName.innerHTML = file.name;
+      videoPlayer.onloadedmetadata = function() {
+        var hours = Math.floor(videoPlayer.duration / 3600);
+        var minutes = Math.floor((videoPlayer.duration % 3600) / 60);
+        var seconds = Math.floor(videoPlayer.duration % 60);
+        if(hours>0){
+            duration.innerHTML = hours + " hours " + minutes + " minutes " + seconds + " seconds";
+}else if(minutes>0){
+duration.innerHTML = minutes + " minutes " + seconds + " seconds";
+}else{
+duration.innerHTML = seconds + " seconds";
+}
+};
+videoContainer.style.display = "block";
+}
+};
+
+function playAudio() {
+audio.play();
+setInterval(updateTimeline, 1000);
+}
+
+function pauseAudio() {
+audio.pause();
+}
+
+function updateTimeline() {
+var percentage = (audio.currentTime / audio.duration) * 100;
+timeline.style.width = percentage + "%";
+var currentHours = Math.floor(audio.currentTime / 3600);
+var currentMinutes = Math.floor((audio.currentTime % 3600) / 60);
+var currentSeconds = Math.floor(audio.currentTime % 60);
+if(currentHours>0){
+currentTime.innerHTML = currentHours + " hours " + currentMinutes + " minutes " + currentSeconds + " seconds";
+}else if(currentMinutes>0){
+currentTime.innerHTML = currentMinutes + " minutes " + currentSeconds + " seconds";
+}else{
+currentTime.innerHTML = currentSeconds + " seconds";
+}
+}
+
+</script>
+</body>
+</html>
