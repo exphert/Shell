@@ -1,16 +1,4 @@
 <?php
-function generateSessionToken()
-{
-	$data['_token'] = md5(uniqid(rand(), true));
-	$_SESSION['_token'] = $data['_token'];
-}
-
-?>
-
-
-
-
-<?php
 
 
 $style = "
@@ -299,25 +287,19 @@ echo $style;
 echo $guiscript;
 ?>
 
-
-
-
 <div class="center font">
 <pre style="font-size:large;">
 <?php
-if(isset($_GET['login'])) {
+$user = "sansxpl";
+$pass = "sxpl69";
 
-	$user = "sansxpl";
-	$pass = "sxpl69";
-
-	if (($_SERVER["PHP_AUTH_USER"] != $user) || (($_SERVER["PHP_AUTH_PW"]) != $pass))
-	{
+if (($_SERVER["PHP_AUTH_USER"] != $user) || (($_SERVER["PHP_AUTH_PW"]) != $pass))
+{
 		header("WWW-Authenticate: Basic realm=\"Login\"");
 		header("HTTP/1.0 401 Unauthorized");
 		exit();
-	} else {
-
-		echo $banner;
+}
+echo $banner;
 
 		if (isset($_GET['gui'])) {
 			echo $guibtn;
@@ -413,24 +395,6 @@ if(isset($_GET['login'])) {
 		}
 
 	}
-}
-if(isset($_GET['logout'])) {
-
-	if(isset($_GET['logout'])) {
-		if(isset($_SERVER['PHP_AUTH_USER'])) {
-			unset($_SERVER['PHP_AUTH_USER']);
-			$_SERVER['PHP_AUTH_USER'] = null;
-			var_dump('PHP_AUTH_USER unset');
-		}
-
-		if(isset($_SERVER['PHP_AUTH_PW'])) {
-			unset($_SERVER['PHP_AUTH_PW']);
-			$_SERVER['PHP_AUTH_PW'] = null;
-			var_dump('PHP_AUTH_PW unset');
-		}
-	}
-
-}
 ?>
 </pre>
 </div>
